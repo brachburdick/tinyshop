@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "SubagentStop": [
+      {
+        "command": ".claude/hooks/subagent-stop.sh",
+        "description": "Verify session summary exists before allowing subagent completion"
+      }
+    ]
+  }
+}
