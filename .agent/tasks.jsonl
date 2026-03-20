@@ -1,0 +1,40 @@
+{"id":"task-001","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Next.js scaffold + dependencies","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-002","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Shared types + interface contract","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-003","taskType":"feature","flowPhase":"verify","status":"complete","summary":"SQLite schema + settings service","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-004","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Artifact Engine: file watcher + frontmatter parser","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-005","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Artifact Engine: in-memory index (getAll/getByType/getByPath)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-006","taskType":"feature","flowPhase":"verify","status":"complete","summary":"SSE endpoint /api/events","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-007","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Artifact API routes (GET /api/artifacts, GET /api/artifacts/:path)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-008","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Launch package assembly (GET /api/launch-package)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-009","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Next-action parser (state file extraction)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-010","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Decision scanner ([DECISION NEEDED] / [ASK OPERATOR] markers)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-011","taskType":"feature","flowPhase":"verify","status":"complete","summary":"App shell + layout + navigation","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-012","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Workshop Dashboard + mascot cards","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-013","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Launch Drawer component","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-014","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Decision Queue component (read-only card list)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-015","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Artifact Viewer (sidebar + markdown renderer)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-016","taskType":"feature","flowPhase":"verify","status":"complete","summary":"SSE hook + frontend updates (useSSE, useArtifacts hooks)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-017","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Project scaffolder utility (POST /api/projects/scaffold)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-018","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Compatibility checker (checkCompatibility)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-019","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Welcome screen + project setup flow","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-020","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Terminal launch (macOS, POST /api/launch via osascript)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-021","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Launch-then-watch flow (watch expected output, emit SSE)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-022","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Settings view (project path, API key field)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-023","taskType":"debug","flowPhase":"verify","status":"complete","summary":"Edge case handling (malformed frontmatter, missing state, deleted project)","blockers":[],"updated":"2026-03-20T00:00:00Z"}
+{"id":"task-100","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Define PipelineManifest TypeScript types in src/lib/types/manifest.ts","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-101","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Implement manifest loader with auto-detection and v1.8/v1.9 defaults","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-102","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Refactor compatibility.ts to validate against manifest instead of hardcoded paths","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-103","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Refactor scaffolder.ts to scaffold based on manifest version","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-104","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Refactor launch-package.ts to read entity metadata from manifest","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-105","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Refactor next-action.ts to parse state per manifest config (markdown or JSONL)","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-106","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Refactor decision-scanner.ts to use markers from manifest","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-107","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Refactor artifact-engine/parser.ts to derive types per manifest rules","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-108","taskType":"feature","flowPhase":"verify","status":"complete","summary":"Add GET /api/manifest endpoint returning resolved manifest","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-109","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Refactor StatusBoard.tsx and LaunchDrawer.tsx for dynamic entity list","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-110","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Wire manifest cache clearing into singleton.ts on project-path change","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-111","taskType":"refactor","flowPhase":"verify","status":"complete","summary":"Widen ArtifactType, MascotRole, DecisionItem marker to string for manifest-driven values","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-112","taskType":"feature","flowPhase":"pending","status":"pending","summary":"Update hooks (useSSE, useRoleStatuses) for entity-based naming","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-113","taskType":"feature","flowPhase":"pending","status":"pending","summary":"Update workshop page to fetch manifest and pass entities to StatusBoard","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-114","taskType":"feature","flowPhase":"pending","status":"pending","summary":"Update welcome/scaffold flow to offer pipeline version selection (v1.8 or v1.9)","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-115","taskType":"feature","flowPhase":"pending","status":"pending","summary":"Add test suite (Vitest + React Testing Library) for manifest loader and refactored modules","blockers":[],"updated":"2026-03-20T19:45:00Z"}
+{"id":"task-116","taskType":"debug","flowPhase":"pending","status":"pending","summary":"Build verification — run npm run build and fix any type errors from refactor","blockers":[],"updated":"2026-03-20T19:45:00Z"}

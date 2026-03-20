@@ -1,85 +1,131 @@
 /**
  * Next-action derivation.
  *
- * Reads docs/agents/orchestrator-state.md and extracts the first item
- * from the "Next Session Priorities" section to determine the recommended
- * next role to dispatch.
+ * Reads the pipeline state source (orchestrator-state.md for v1.8, or
+ * tasks.jsonl for v1.9) and determines the recommended next entity to
+ * dispatch. Behavior is driven by the pipeline manifest.
  *
- * Graceful fallback: returns a safe default if the file is missing or
+ * Graceful fallback: returns a safe default if the source is missing or
  * unparseable.
  */
 
 import fs from "fs";
 import path from "path";
 import type { NextAction } from "@/types/index";
+import { getManifest } from "./manifest";
 
 const FALLBACK: NextAction = {
-  role: "unknown",
-  reason: "Unable to determine — orchestrator state not found",
+  entityId: "unknown",
+  entityLabel: "Unknown",
+  reason: "Unable to determine — state source not found",
   launchPackageUrl: "",
 };
 
-/**
- * Extract the first "Next Session Priorities" entry from orchestrator state
- * content.
- *
- * Looks for a section like:
- *   ## Next Session Priorities
- *   1. Developer — implement X
- *   2. Validator — verify Y
- *
- * Returns { role, reason } or null if the section cannot be found.
- */
-function parseNextPriority(content: string): { role: string; reason: string } | null {
-  // Find the "Next Session Priorities" section
-  const sectionMatch = content.match(
-    /##\s*Next Session Priorities\b([\s\S]*?)(?=\n##\s|\s*$)/i
-  );
+// ---------------------------------------------------------------------------
+// Markdown-sections parser (v1.8)
+// ---------------------------------------------------------------------------
+
+function parseMarkdownNextPriority(
+  content: string,
+  sectionName: string
+): { entityId: string; reason: string } | null {
+  const escaped = sectionName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(`##\\s*${escaped}\\b([\\s\\S]*?)(?=\\n##\\s|\\s*$)`, "i");
+  const sectionMatch = content.match(re);
   if (!sectionMatch) return null;
 
   const section = sectionMatch[1];
-
-  // Match ordered or unordered list item: "1. Role — reason" or "- Role — reason"
   const itemMatch = section.match(
     /^\s*(?:\d+\.|[-*])\s+([A-Za-z][A-Za-z0-9 _-]*)(?:\s*[—–-]+\s*(.+))?/m
   );
   if (!itemMatch) return null;
 
-  const role = itemMatch[1].trim().toLowerCase().replace(/\s+/g, "-");
+  const entityId = itemMatch[1].trim().toLowerCase().replace(/\s+/g, "-");
   const reason = itemMatch[2]
     ? itemMatch[2].trim()
     : `${itemMatch[1].trim()} is next in the pipeline`;
 
-  return { role, reason };
+  return { entityId, reason };
 }
 
+// ---------------------------------------------------------------------------
+// JSONL parser (v1.9)
+// ---------------------------------------------------------------------------
+
+function parseJsonlNextAction(
+  content: string
+): { entityId: string; reason: string } | null {
+  const lines = content.trim().split("\n").filter(Boolean);
+
+  for (const line of lines) {
+    try {
+      const task = JSON.parse(line) as Record<string, unknown>;
+      const status = String(task["status"] ?? "");
+      if (status === "pending" || status === "ready") {
+        const taskId = String(task["id"] ?? "unknown");
+        const summary = String(task["summary"] ?? "Next pending task");
+        return { entityId: taskId, reason: summary };
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
 /**
- * Derive the next recommended action from the orchestrator state file.
- *
- * @param projectPath  Absolute path to the attached project
+ * Derive the next recommended action for the project.
  */
 export function deriveNextAction(projectPath: string): NextAction {
-  const stateFilePath = path.join(projectPath, "docs/agents/orchestrator-state.md");
+  const manifest = getManifest(projectPath);
+  const { stateFormat, nextActionSection } = manifest.parsing;
+
+  if (stateFormat === "none") {
+    return { ...FALLBACK, reason: "No automated next-action for this pipeline version" };
+  }
+
+  // Determine which file to read
+  const stateFilePath = stateFormat === "jsonl"
+    ? manifest.paths.taskTracker
+    : manifest.paths.stateFile;
+
+  if (!stateFilePath) return FALLBACK;
 
   let content: string;
   try {
-    content = fs.readFileSync(stateFilePath, "utf-8");
+    content = fs.readFileSync(path.join(projectPath, stateFilePath), "utf-8");
   } catch {
     return FALLBACK;
   }
 
-  const priority = parseNextPriority(content);
-  if (!priority) {
+  let result: { entityId: string; reason: string } | null = null;
+
+  if (stateFormat === "markdown-sections" && nextActionSection) {
+    result = parseMarkdownNextPriority(content, nextActionSection);
+  } else if (stateFormat === "jsonl") {
+    result = parseJsonlNextAction(content);
+  }
+
+  if (!result) {
     return {
-      role: "unknown",
-      reason: "Unable to determine — Next Session Priorities section not found",
-      launchPackageUrl: "",
+      ...FALLBACK,
+      reason: "Unable to determine — state section not found or empty",
     };
   }
 
+  // Resolve entity label from manifest
+  const entity = manifest.entities.find((e) => e.id === result!.entityId);
+  const entityLabel = entity?.label ?? result.entityId;
+
   return {
-    role: priority.role,
-    reason: priority.reason,
-    launchPackageUrl: `/api/launch-package?role=${encodeURIComponent(priority.role)}`,
+    entityId: result.entityId,
+    entityLabel,
+    reason: result.reason,
+    launchPackageUrl: `/api/launch-package?entity=${encodeURIComponent(result.entityId)}`,
   };
 }

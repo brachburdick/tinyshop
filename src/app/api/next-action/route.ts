@@ -1,8 +1,9 @@
 /**
  * GET /api/next-action
  *
- * Returns the recommended next role to dispatch based on the orchestrator
- * state file. Gracefully falls back if the file is missing or unparseable.
+ * Returns the recommended next entity to dispatch based on the pipeline
+ * state source. Works with both v1.8 (orchestrator-state.md) and v1.9
+ * (tasks.jsonl) pipelines.
  */
 
 import { NextResponse } from "next/server";
@@ -17,7 +18,8 @@ export async function GET(): Promise<NextResponse> {
 
   if (!projectPath) {
     return NextResponse.json({
-      role: "unknown",
+      entityId: "unknown",
+      entityLabel: "Unknown",
       reason: "Unable to determine — no project attached",
       launchPackageUrl: "",
     });

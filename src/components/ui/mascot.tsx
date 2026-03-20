@@ -1,28 +1,22 @@
-export type MascotRole =
-  | "architect"
-  | "designer"
-  | "developer"
-  | "kickstart"
-  | "orchestrator"
-  | "researcher"
-  | "qa-tester"
-  | "validator";
-
 interface MascotProps {
-  role: MascotRole;
+  sprite: string;
   size?: number;
   className?: string;
 }
 
-export function Mascot({ role, size = 48, className }: MascotProps) {
+/**
+ * Renders a mascot SVG sprite. The sprite ID comes from the pipeline
+ * manifest's entity.mascotSprite field. Returns null if no sprite is set.
+ */
+export function Mascot({ sprite, size = 48, className }: MascotProps) {
   return (
     <svg
       width={size}
       height={size}
       className={className}
-      aria-label={`TINY ${role}`}
+      aria-label={`TINY ${sprite}`}
     >
-      <use href={`/mascots/sprites.svg#${role}`} />
+      <use href={`/mascots/sprites.svg#${sprite}`} />
     </svg>
   );
 }

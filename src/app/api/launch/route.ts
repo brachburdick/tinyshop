@@ -1,17 +1,14 @@
 /**
  * POST /api/launch
  *
- * Body: { role: string }
+ * Body: { entityId: string } (also accepts { role: string } for backcompat)
  *
  * Integration flow:
- *   1. Assemble the launch package for the given role.
+ *   1. Assemble the launch package for the given entity.
  *   2. Register expectedOutput with the CompletionTracker.
- *   3. Emit status-update { role, status: "launched" } via EventBus.
+ *   3. Emit status-update { entityId, status: "launched" } via EventBus.
  *   4. Open Terminal.app with the terminal command via osascript.
  *   5. Return { success: boolean }.
- *
- * Returns 400 if role is missing.
- * Returns 404 if no project is attached or the role's startup prompt doesn't exist.
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -31,18 +28,23 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  if (
-    typeof body !== "object" ||
-    body === null ||
-    typeof (body as Record<string, unknown>).role !== "string"
-  ) {
+  if (typeof body !== "object" || body === null) {
     return NextResponse.json(
-      { error: "Missing required field: role" },
+      { error: "Missing required field: entityId" },
       { status: 400 }
     );
   }
 
-  const role = (body as Record<string, unknown>).role as string;
+  const record = body as Record<string, unknown>;
+  const entityId = (typeof record.entityId === "string" ? record.entityId : null)
+    ?? (typeof record.role === "string" ? record.role : null);
+
+  if (!entityId) {
+    return NextResponse.json(
+      { error: "Missing required field: entityId" },
+      { status: 400 }
+    );
+  }
 
   const settings = getSettings();
   const projectPath = settings.projectPath;
@@ -52,11 +54,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   // Step 1: Assemble launch package
-  const launchPackage = assembleLaunchPackage(role, projectPath);
+  const launchPackage = assembleLaunchPackage(entityId, projectPath);
 
   if (!launchPackage) {
     return NextResponse.json(
-      { error: `Startup prompt not found for role: ${role}` },
+      { error: `Entity not found in manifest: ${entityId}` },
       { status: 404 }
     );
   }
@@ -64,22 +66,19 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // Step 2: Register expectedOutput watch BEFORE emitting launched so the
   // tracker is ready if the file appears very quickly
   if (launchPackage.expectedOutput) {
-    await completionTracker.watch(role, launchPackage.expectedOutput, projectPath);
+    await completionTracker.watch(entityId, launchPackage.expectedOutput, projectPath);
   }
 
   // Step 3: Emit launched status
   eventBus.broadcast({
     type: "status-update",
-    data: { role, status: "launched" },
+    data: { entityId, status: "launched" },
   });
 
-  // Step 4: Open terminal (non-blocking — we return success even if the
-  // terminal open itself had an issue, because the package was assembled)
+  // Step 4: Open terminal
   const launchResult = await launchTerminal(launchPackage.terminalCommand);
 
   if (!launchResult.success) {
-    // Terminal open failed but we already emitted launched — return the error
-    // so the frontend can surface it, while still reporting the launch attempt
     return NextResponse.json(
       { success: false, error: launchResult.error },
       { status: 500 }

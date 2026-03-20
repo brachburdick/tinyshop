@@ -1,29 +1,30 @@
 /**
  * Project scaffolder.
  *
- * Creates a minimal but valid THE_FACTORY protocol directory structure in
- * the target folder. The generated structure passes the compatibility checker.
+ * Creates a valid pipeline project directory structure in the target folder.
+ * Scaffold layout is driven by the pipeline manifest — supports both v1.8
+ * (7-role) and v1.9 (operator + skills) structures.
  *
  * Refuses to scaffold into a non-empty directory — returns an error result
  * rather than throwing.
- *
- * Usage:
- *   const result = scaffoldProject({ name, stack, description, path });
- *   if (!result.compatible) { // handle error }
  */
 
 import fs from "fs";
 import path from "path";
 import { checkCompatibility } from "./compatibility";
+import { DEFAULT_V18, DEFAULT_V19 } from "./manifest";
 import type { ProjectConfig } from "@/types/index";
 import type { BootstrapFormData } from "@/lib/types/index";
+import type { PipelineManifest } from "@/lib/types/manifest";
 
 // ---------------------------------------------------------------------------
-// Template content generators
+// Template content generators — keyed by templateId
 // ---------------------------------------------------------------------------
 
-function agentBootstrapContent(data: BootstrapFormData): string {
-  return `# ${data.name}
+type TemplateGenerator = (data: BootstrapFormData, manifest: PipelineManifest) => string;
+
+const TEMPLATE_GENERATORS: Record<string, TemplateGenerator> = {
+  "agent-bootstrap": (data) => `# ${data.name}
 
 ${data.description}
 
@@ -53,11 +54,9 @@ ${data.description}
 1. Skipping the preamble files before starting work.
 2. Inventing formats instead of using templates from \`templates/\`.
 3. Making changes outside the scope defined in the handoff packet.
-`;
-}
+`,
 
-function commonRulesContent(): string {
-  return `# Common Rules — All Roles
+  "common-rules": () => `# Common Rules — All Roles
 
 Read \`AGENT_BOOTSTRAP.md\` before anything else.
 
@@ -83,32 +82,11 @@ Tool failures, wrong commands, retries, environment surprises — report them ho
 1. Write the required artifact(s) to the exact output path from your handoff packet.
 2. If your work produced learnings, append them to \`LEARNINGS.md\`.
 3. Tell the operator: "Session summary written to \`[path]\`."
-`;
-}
+`,
 
-function rolePreambleContent(role: string): string {
-  return `# Role: ${role}
-
-You implement work within the scope defined by your handoff packet. You produce artifacts and a session summary.
-
-## Artifact Output
-Session summaries must use \`templates/session-summary.md\`. Every field is required ("None" is valid for empty sections).
-
-## Scope Discipline
-- Only read/modify files listed in the handoff packet's Scope Boundary.
-- Out-of-scope changes needed? STOP. Document under Scope Violations.
-
-## [BLOCKED] Protocol
-On ambiguity not covered by spec or handoff:
-1. Do not infer or guess.
-2. Write \`[BLOCKED: description]\` in session summary.
-3. Complete as much as possible without the blocked decision.
-`;
-}
-
-function orchestratorStateContent(projectName: string): string {
-  const today = new Date().toISOString().split("T")[0];
-  return `# Orchestrator State — ${projectName}
+  "orchestrator-state": (data) => {
+    const today = new Date().toISOString().split("T")[0];
+    return `# Orchestrator State — ${data.name}
 
 ---
 status: ACTIVE
@@ -134,29 +112,9 @@ None
 ## Notes
 Project scaffolded on ${today}.
 `;
-}
+  },
 
-function startupPromptContent(role: string, projectName: string): string {
-  return `# ${role} Startup Prompt — ${projectName}
-
-## Role
-${role}
-
-## Load These Files
-- \`AGENT_BOOTSTRAP.md\`
-- \`preambles/COMMON_RULES.md\`
-- \`preambles/${role.toLowerCase()}.md\`
-
-## Objective
-[To be filled in by the Orchestrator before dispatching this role.]
-
-## Expected Output
-[To be defined per session.]
-`;
-}
-
-function sessionSummaryTemplateContent(): string {
-  return `# Session Summary: [FILL: TASK_ID]
+  "session-summary": () => `# Session Summary: [FILL: TASK_ID]
 
 ---
 status: [FILL: COMPLETE | PARTIAL | BLOCKED]
@@ -181,14 +139,8 @@ project_root: [FILL: /absolute/path/to/project]
 ## Artifacts Produced
 - \`[FILL: path/to/artifact]\` — [FILL: what it is]
 
-## Interfaces Added or Modified
-- [FILL: exact signatures, payload fields, endpoint shapes, or "None"]
-
 ## Decisions Made
 - [FILL: decision]: [FILL: rationale]. Alternative considered: [FILL: rejected option and why].
-
-## Scope Violations
-- [FILL: needed out-of-scope change, or "None"]
 
 ## Remaining Work
 - [FILL: what is left undone, or "None"]
@@ -201,9 +153,82 @@ project_root: [FILL: /absolute/path/to/project]
 
 ## Learnings
 - [FILL: durable lesson or skill-file candidate, or "None"]
+`,
 
-## Follow-Up Items
-- [FILL: backlog-worthy out-of-scope item, or "None"]
+  // v1.9 templates
+  "claude-md": (data) => `# ${data.name} — Project CLAUDE.md
+
+## Stack
+${data.stack}
+
+## Build / Test
+\`\`\`bash
+# Add your build and test commands here
+\`\`\`
+
+## Architecture
+${data.description}
+
+## Critical Rules
+- Read this file before starting work.
+- Load skills from the trigger table as needed.
+- Update .agent/tasks.jsonl at session end.
+
+## Trigger Table
+| Task Pattern | Skill | Notes |
+|---|---|---|
+| _Add project-specific skills here_ | skills/*.md | |
+
+## Flow Skills
+Flow skills are inherited from the portfolio level.
+
+## Gotchas
+- _Add project-specific gotchas as you discover them._
+`,
+
+  "empty-jsonl": () => "",
+};
+
+// ---------------------------------------------------------------------------
+// v1.8 entity file generators
+// ---------------------------------------------------------------------------
+
+function rolePreambleContent(role: string): string {
+  return `# Role: ${role}
+
+You implement work within the scope defined by your handoff packet. You produce artifacts and a session summary.
+
+## Artifact Output
+Session summaries must use \`templates/session-summary.md\`. Every field is required ("None" is valid for empty sections).
+
+## Scope Discipline
+- Only read/modify files listed in the handoff packet's Scope Boundary.
+- Out-of-scope changes needed? STOP. Document under Scope Violations.
+
+## [BLOCKED] Protocol
+On ambiguity not covered by spec or handoff:
+1. Do not infer or guess.
+2. Write \`[BLOCKED: description]\` in session summary.
+3. Complete as much as possible without the blocked decision.
+`;
+}
+
+function startupPromptContent(role: string, projectName: string): string {
+  return `# ${role} Startup Prompt — ${projectName}
+
+## Role
+${role}
+
+## Load These Files
+- \`AGENT_BOOTSTRAP.md\`
+- \`preambles/COMMON_RULES.md\`
+- \`preambles/${role.toLowerCase()}.md\`
+
+## Objective
+[To be filled in by the Orchestrator before dispatching this role.]
+
+## Expected Output
+[To be defined per session.]
 `;
 }
 
@@ -211,15 +236,9 @@ project_root: [FILL: /absolute/path/to/project]
 // Scaffolder
 // ---------------------------------------------------------------------------
 
-const ROLES = [
-  "Orchestrator",
-  "Architect",
-  "Researcher",
-  "Designer",
-  "Developer",
-  "Validator",
-  "QA-Tester",
-];
+export interface ScaffoldOptions {
+  pipelineVersion?: "1.8" | "1.9";
+}
 
 /**
  * Scaffold a new protocol project into `data.path`.
@@ -228,8 +247,13 @@ const ROLES = [
  * `{ compatible: false, missing: ["Directory is not empty"] }` without
  * writing anything.
  */
-export function scaffoldProject(data: BootstrapFormData): ProjectConfig {
+export function scaffoldProject(
+  data: BootstrapFormData,
+  options: ScaffoldOptions = {}
+): ProjectConfig {
   const targetPath = path.resolve(data.path);
+  const version = options.pipelineVersion ?? "1.9";
+  const manifest = version === "1.9" ? DEFAULT_V19 : DEFAULT_V18;
 
   // Guard: refuse to scaffold into a non-empty directory
   try {
@@ -238,6 +262,7 @@ export function scaffoldProject(data: BootstrapFormData): ProjectConfig {
       return {
         projectPath: targetPath,
         projectName: data.name,
+        pipelineVersion: version,
         compatible: false,
         missing: [
           "Directory is not empty — scaffolding refused. Clear the directory or choose an empty one.",
@@ -248,50 +273,38 @@ export function scaffoldProject(data: BootstrapFormData): ProjectConfig {
     // Directory doesn't exist yet — that's fine, we'll create it
   }
 
-  // Create directory structure
-  const dirs = [
-    "preambles",
-    "templates",
-    "docs/agents/startup-prompts",
-    "specs",
-    "skills",
-  ];
-
-  for (const dir of dirs) {
+  // Create directory structure from manifest
+  for (const dir of manifest.scaffolding.dirs) {
     fs.mkdirSync(path.join(targetPath, dir), { recursive: true });
   }
 
-  // Write AGENT_BOOTSTRAP.md
-  write(targetPath, "AGENT_BOOTSTRAP.md", agentBootstrapContent(data));
-
-  // Write preambles
-  write(targetPath, "preambles/COMMON_RULES.md", commonRulesContent());
-  for (const role of ROLES) {
-    write(
-      targetPath,
-      `preambles/${role.toLowerCase()}.md`,
-      rolePreambleContent(role)
-    );
+  // Write template files from manifest
+  for (const tmpl of manifest.scaffolding.templateFiles) {
+    const generator = TEMPLATE_GENERATORS[tmpl.templateId];
+    if (generator) {
+      write(targetPath, tmpl.path, generator(data, manifest));
+    }
   }
 
-  // Write orchestrator state
-  write(
-    targetPath,
-    "docs/agents/orchestrator-state.md",
-    orchestratorStateContent(data.name)
-  );
-
-  // Write startup prompts for each role
-  for (const role of ROLES) {
-    write(
-      targetPath,
-      `docs/agents/startup-prompts/${role.toLowerCase()}.md`,
-      startupPromptContent(role, data.name)
-    );
+  // v1.8: also generate per-entity files (preambles + startup prompts)
+  if (version === "1.8") {
+    for (const entity of manifest.entities) {
+      if (manifest.paths.preambleDir) {
+        write(
+          targetPath,
+          `${manifest.paths.preambleDir}/${entity.id}.md`,
+          rolePreambleContent(entity.label)
+        );
+      }
+      if (manifest.paths.startupPromptsDir) {
+        write(
+          targetPath,
+          `${manifest.paths.startupPromptsDir}/${entity.id}.md`,
+          startupPromptContent(entity.label, data.name)
+        );
+      }
+    }
   }
-
-  // Write session summary template
-  write(targetPath, "templates/session-summary.md", sessionSummaryTemplateContent());
 
   // Verify the result passes the compatibility checker
   return checkCompatibility(targetPath);

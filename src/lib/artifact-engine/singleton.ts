@@ -12,6 +12,7 @@
 import { ArtifactIndex } from "./index";
 import { eventBus } from "./event-bus";
 import { getSettings } from "@/lib/settings";
+import { clearManifestCache } from "@/lib/manifest";
 
 let instance: ArtifactIndex | null = null;
 let currentProjectPath: string | null = null;
@@ -34,6 +35,7 @@ export async function getArtifactIndex(): Promise<ArtifactIndex | null> {
     await instance.stop();
     instance = null;
     currentProjectPath = null;
+    clearManifestCache();
   }
 
   if (!instance) {

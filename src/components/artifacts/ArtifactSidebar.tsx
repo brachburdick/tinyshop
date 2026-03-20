@@ -2,9 +2,10 @@
 
 import { useState, useMemo } from "react";
 import { ChevronDown, ChevronRight, Search, X } from "lucide-react";
-import type { ArtifactRecord, ArtifactType } from "@/types";
+import type { ArtifactRecord } from "@/types";
 
-const TYPE_LABELS: Record<ArtifactType, string> = {
+/** Fallback labels for known artifact types. Dynamic types show as-is. */
+const TYPE_LABELS: Record<string, string> = {
   spec: "Specs",
   plan: "Plans",
   tasks: "Tasks",
@@ -15,22 +16,18 @@ const TYPE_LABELS: Record<ArtifactType, string> = {
   "research-request": "Research",
   "research-findings": "Findings",
   "orchestrator-state": "Orchestrator",
+  "task-tracker": "Task Trackers",
+  "run-log": "Run Logs",
+  "incident-log": "Incident Logs",
+  eval: "Evals",
+  skill: "Skills",
+  adr: "ADRs",
   unknown: "Other",
 };
 
-const TYPE_ORDER: ArtifactType[] = [
-  "spec",
-  "plan",
-  "tasks",
-  "session-summary",
-  "handoff-packet",
-  "validator-verdict",
-  "qa-verdict",
-  "research-request",
-  "research-findings",
-  "orchestrator-state",
-  "unknown",
-];
+function labelForType(type: string): string {
+  return TYPE_LABELS[type] ?? type.charAt(0).toUpperCase() + type.slice(1).replace(/-/g, " ");
+}
 
 interface ArtifactSidebarProps {
   artifacts: ArtifactRecord[];
@@ -46,12 +43,12 @@ export function ArtifactSidebar({
   onSelect,
 }: ArtifactSidebarProps) {
   const [filter, setFilter] = useState("");
-  const [collapsed, setCollapsed] = useState<Set<ArtifactType>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const filterLower = filter.toLowerCase();
 
-  const grouped = useMemo(() => {
-    const map = new Map<ArtifactType, ArtifactRecord[]>();
+  const { grouped, typeOrder } = useMemo(() => {
+    const map = new Map<string, ArtifactRecord[]>();
     for (const art of artifacts) {
       const filtered =
         !filterLower ||
@@ -63,10 +60,28 @@ export function ArtifactSidebar({
       existing.push(art);
       map.set(art.type, existing);
     }
-    return map;
+    // Sort types: known types first in a reasonable order, then dynamic types alphabetically
+    const knownOrder = [
+      "spec", "plan", "tasks", "session-summary", "handoff-packet",
+      "validator-verdict", "qa-verdict", "research-request", "research-findings",
+      "orchestrator-state", "task-tracker", "run-log", "incident-log",
+      "eval", "skill", "adr",
+    ];
+    const types = Array.from(map.keys());
+    types.sort((a, b) => {
+      const ai = knownOrder.indexOf(a);
+      const bi = knownOrder.indexOf(b);
+      if (a === "unknown") return 1;
+      if (b === "unknown") return -1;
+      if (ai >= 0 && bi >= 0) return ai - bi;
+      if (ai >= 0) return -1;
+      if (bi >= 0) return 1;
+      return a.localeCompare(b);
+    });
+    return { grouped: map, typeOrder: types };
   }, [artifacts, filterLower]);
 
-  const toggleCollapse = (type: ArtifactType) => {
+  const toggleCollapse = (type: string) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
       if (next.has(type)) {
@@ -123,7 +138,7 @@ export function ArtifactSidebar({
             {filter ? "No matching artifacts." : "No artifacts found in this project."}
           </div>
         ) : (
-          TYPE_ORDER.filter((t) => grouped.has(t)).map((type) => {
+          typeOrder.map((type) => {
             const items = grouped.get(type)!;
             const isCollapsed = collapsed.has(type);
             return (
@@ -137,7 +152,7 @@ export function ArtifactSidebar({
                   ) : (
                     <ChevronDown size={12} />
                   )}
-                  {TYPE_LABELS[type]}
+                  {labelForType(type)}
                   <span className="ml-auto font-normal normal-case text-ts-text-muted">
                     {items.length}
                   </span>

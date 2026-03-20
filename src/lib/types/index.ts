@@ -13,7 +13,7 @@ export interface BootstrapFormData {
 
 export interface MascotState {
   role: string;
-  status: import("@/types/index").RoleStatus;
+  status: import("@/types/index").EntityStatus;
   label: string; // display name, e.g. "TINY Architect"
 }
 

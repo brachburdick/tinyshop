@@ -19,7 +19,7 @@ import fs from "fs";
 import path from "path";
 import { startWatcher } from "./watcher";
 import { parseArtifact } from "./parser";
-import type { ArtifactRecord, ArtifactType } from "@/types/index";
+import type { ArtifactRecord } from "@/types/index";
 
 export interface ArtifactIndexEvents {
   /** Fired when an artifact is added or updated in the index */
@@ -98,7 +98,7 @@ export class ArtifactIndex extends EventEmitter {
   }
 
   /** Returns all artifacts of a given type. */
-  getByType(type: ArtifactType): ArtifactRecord[] {
+  getByType(type: string): ArtifactRecord[] {
     return this.getAll().filter((r) => r.type === type);
   }
 

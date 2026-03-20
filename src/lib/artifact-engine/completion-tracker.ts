@@ -133,7 +133,7 @@ class CompletionTracker {
       // Emit completion event
       eventBus.broadcast({
         type: "status-update",
-        data: { role, status: "complete" },
+        data: { entityId: role, status: "complete" },
       });
 
       // Remove the watch — completion is a one-shot event

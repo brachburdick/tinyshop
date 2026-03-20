@@ -1,15 +1,9 @@
 /**
  * Compatibility checker.
  *
- * Determines whether a folder contains a compatible THE_FACTORY protocol
- * project by verifying the presence of required files and directories.
- *
- * Required:
- *   - AGENT_BOOTSTRAP.md
- *   - preambles/COMMON_RULES.md
- *   - At least one role preamble in preambles/ (any .md other than COMMON_RULES.md)
- *   - templates/  (directory)
- *   - docs/agents/orchestrator-state.md
+ * Determines whether a folder contains a compatible pipeline project by
+ * reading the pipeline manifest (explicit or auto-detected) and verifying
+ * the presence of required files, directories, and entities.
  *
  * Returns a ProjectConfig — never throws.
  */
@@ -17,21 +11,13 @@
 import fs from "fs";
 import path from "path";
 import type { ProjectConfig } from "@/types/index";
-
-const REQUIRED_FILES = [
-  "AGENT_BOOTSTRAP.md",
-  "preambles/COMMON_RULES.md",
-  "templates",                         // directory
-  "docs/agents/orchestrator-state.md",
-] as const;
+import { getManifest, detectPipelineVersion } from "./manifest";
 
 /**
- * Attempt to derive a human-readable project name from the folder or from
- * the first heading in AGENT_BOOTSTRAP.md.
+ * Attempt to derive a human-readable project name from the bootstrap file.
  */
-function deriveProjectName(projectPath: string): string {
-  // Try to read the first H1 from AGENT_BOOTSTRAP.md
-  const bootstrapPath = path.join(projectPath, "AGENT_BOOTSTRAP.md");
+function deriveProjectName(projectPath: string, bootstrapFile: string): string {
+  const bootstrapPath = path.join(projectPath, bootstrapFile);
   try {
     const content = fs.readFileSync(bootstrapPath, "utf-8");
     const match = content.match(/^#\s+(.+)$/m);
@@ -47,48 +33,63 @@ function deriveProjectName(projectPath: string): string {
 
 /**
  * Check whether the directory at `projectPath` contains a compatible
- * protocol project structure.
- *
- * @param projectPath  Absolute path to the directory to check
+ * pipeline project structure.
  */
 export function checkCompatibility(projectPath: string): ProjectConfig {
+  const manifest = getManifest(projectPath);
+  const version = detectPipelineVersion(projectPath);
   const missing: string[] = [];
 
-  // Check each required file/directory
-  for (const required of REQUIRED_FILES) {
-    const fullPath = path.join(projectPath, required);
+  // Check required files
+  for (const file of manifest.compatibility.requiredFiles) {
+    const fullPath = path.join(projectPath, file);
     try {
-      const stat = fs.statSync(fullPath);
-      // "templates" must be a directory
-      if (required === "templates" && !stat.isDirectory()) {
-        missing.push(required);
-      }
+      fs.statSync(fullPath);
     } catch {
-      missing.push(required);
+      missing.push(file);
     }
   }
 
-  // Check for at least one role preamble
-  const preambleDir = path.join(projectPath, "preambles");
-  let hasRolePreamble = false;
-  try {
-    const entries = fs.readdirSync(preambleDir);
-    hasRolePreamble = entries.some(
-      (e) => e.endsWith(".md") && e !== "COMMON_RULES.md"
-    );
-  } catch {
-    // preambles dir missing — already flagged above via COMMON_RULES.md check
+  // Check required directories
+  for (const dir of manifest.compatibility.requiredDirs) {
+    const fullPath = path.join(projectPath, dir);
+    try {
+      const stat = fs.statSync(fullPath);
+      if (!stat.isDirectory()) {
+        missing.push(dir);
+      }
+    } catch {
+      missing.push(dir);
+    }
   }
 
-  if (!hasRolePreamble) {
-    missing.push("preambles/<role>.md (at least one role preamble required)");
+  // Check entity validation (e.g. at least one role preamble in v1.8)
+  const ev = manifest.compatibility.entityValidation;
+  if (ev) {
+    const entityDir = path.join(projectPath, ev.dir);
+    let entityCount = 0;
+    try {
+      const entries = fs.readdirSync(entityDir);
+      for (const entry of entries) {
+        if (!entry.endsWith(".md")) continue;
+        if (ev.excludeFiles.includes(entry)) continue;
+        entityCount++;
+      }
+    } catch {
+      // directory missing — already flagged via requiredFiles/requiredDirs
+    }
+
+    if (entityCount < ev.minCount) {
+      missing.push(`${ev.dir}/ (at least ${ev.minCount} entity file required)`);
+    }
   }
 
-  const projectName = deriveProjectName(projectPath);
+  const projectName = deriveProjectName(projectPath, manifest.paths.bootstrap);
 
   return {
     projectPath,
     projectName,
+    pipelineVersion: version,
     compatible: missing.length === 0,
     missing,
   };

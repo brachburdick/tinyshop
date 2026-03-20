@@ -8,33 +8,18 @@ import {
 } from "react";
 import { X, Copy, Check, Terminal, FileText, AlertTriangle, ChevronDown, ChevronRight } from "lucide-react";
 import { Mascot } from "@/components/ui/mascot";
-import type { MascotRole } from "@/components/ui/mascot";
 import type { LaunchPackage } from "@/types";
 
 interface LaunchDrawerProps {
-  role: string | null;
+  entityId: string | null;
+  mascotSprite: string | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
 type LaunchState = "idle" | "launching" | "launched" | "error";
 
-const VALID_ROLES: MascotRole[] = [
-  "orchestrator",
-  "architect",
-  "researcher",
-  "designer",
-  "developer",
-  "validator",
-  "qa-tester",
-  "kickstart",
-];
-
-function isValidRole(role: string): role is MascotRole {
-  return VALID_ROLES.includes(role as MascotRole);
-}
-
-export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
+export function LaunchDrawer({ entityId, mascotSprite, isOpen, onClose }: LaunchDrawerProps) {
   const [pkg, setPkg] = useState<LaunchPackage | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
@@ -44,23 +29,23 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
   const [launchError, setLaunchError] = useState<string | null>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const prevRoleRef = useRef<string | null>(null);
+  const prevEntityRef = useRef<string | null>(null);
 
-  // Fetch launch package when role changes
+  // Fetch launch package when entity changes
   useEffect(() => {
-    if (!role || !isOpen) return;
+    if (!entityId || !isOpen) return;
 
-    if (role !== prevRoleRef.current) {
+    if (entityId !== prevEntityRef.current) {
       setPkg(null);
       setFetchError(false);
       setPromptExpanded(false);
       setLaunchState("idle");
       setLaunchError(null);
     }
-    prevRoleRef.current = role;
+    prevEntityRef.current = entityId;
 
     setLoading(true);
-    fetch(`/api/launch-package?role=${encodeURIComponent(role)}`)
+    fetch(`/api/launch-package?entity=${encodeURIComponent(entityId)}`)
       .then((res) => {
         if (!res.ok) throw new Error("Not found");
         return res.json() as Promise<LaunchPackage>;
@@ -75,12 +60,11 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
       .finally(() => {
         setLoading(false);
       });
-  }, [role, isOpen]);
+  }, [entityId, isOpen]);
 
   // Focus trap
   useEffect(() => {
     if (!isOpen) return;
-    // Focus close button when drawer opens
     setTimeout(() => closeButtonRef.current?.focus(), 50);
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -123,7 +107,7 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
   }, [pkg]);
 
   const handleLaunch = useCallback(async () => {
-    if (!role) return;
+    if (!entityId) return;
     setLaunchState("launching");
     setLaunchError(null);
 
@@ -131,7 +115,7 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
       const res = await fetch("/api/launch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role }),
+        body: JSON.stringify({ entityId }),
       });
 
       const data = await res.json() as { success: boolean; error?: string };
@@ -148,13 +132,9 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
       setLaunchState("error");
       setLaunchError("Terminal launch failed. Try copying the command instead.");
     }
-  }, [role, onClose]);
+  }, [entityId, onClose]);
 
-  const displayRole = role
-    ? `TINY ${role.charAt(0).toUpperCase()}${role.slice(1).replace(/-([a-z])/g, (_, c: string) => " " + c.toUpperCase())}`
-    : "";
-
-  const mascotRole = role && isValidRole(role) ? role : null;
+  const displayLabel = pkg?.entityLabel ?? entityId ?? "";
 
   return (
     <>
@@ -173,7 +153,7 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
         ref={drawerRef}
         role="dialog"
         aria-modal="true"
-        aria-label={`Launch package for ${displayRole}`}
+        aria-label={`Launch package for ${displayLabel}`}
         className={[
           "fixed top-0 right-0 z-50 h-screen w-[420px] bg-ts-surface border-l border-ts-border shadow-xl",
           "flex flex-col transition-transform",
@@ -182,9 +162,9 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
       >
         {/* Header */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-ts-border flex-shrink-0">
-          {mascotRole && <Mascot role={mascotRole} size={32} />}
+          {mascotSprite && <Mascot sprite={mascotSprite} size={32} />}
           <span className="flex-1 text-base font-semibold text-ts-text truncate">
-            {displayRole}
+            {displayLabel}
           </span>
           <button
             ref={closeButtonRef}
@@ -203,13 +183,13 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
           ) : fetchError ? (
             <div className="p-5">
               <div className="text-sm text-ts-error mb-3">
-                Couldn&apos;t load launch package for this role.
+                Couldn&apos;t load launch package for this entity.
               </div>
               <button
                 onClick={() => {
                   setFetchError(false);
                   setLoading(true);
-                  fetch(`/api/launch-package?role=${encodeURIComponent(role!)}`)
+                  fetch(`/api/launch-package?entity=${encodeURIComponent(entityId!)}`)
                     .then((r) => r.json() as Promise<LaunchPackage>)
                     .then((d) => { setPkg(d); setFetchError(false); })
                     .catch(() => setFetchError(true))
@@ -223,77 +203,83 @@ export function LaunchDrawer({ role, isOpen, onClose }: LaunchDrawerProps) {
           ) : pkg ? (
             <div className="p-5 space-y-5">
               {/* Description */}
-              <p className="text-sm text-ts-text-muted">{pkg.roleDescription}</p>
+              <p className="text-sm text-ts-text-muted">{pkg.entityDescription}</p>
 
-              {/* Files to Load */}
-              <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-ts-text-muted mb-2">
-                  Files to Load
-                </h3>
-                <div className="space-y-1.5">
-                  {pkg.filesToLoad.map((file) => (
-                    <div
-                      key={file.path}
-                      className={[
-                        "flex items-start gap-2.5 rounded-lg px-3 py-2 text-xs",
-                        file.missing
-                          ? "bg-ts-error/10 border border-ts-error/30"
-                          : "bg-ts-surface-alt",
-                      ].join(" ")}
-                    >
-                      {file.missing ? (
-                        <AlertTriangle size={14} className="text-ts-error flex-shrink-0 mt-0.5" />
-                      ) : (
-                        <FileText size={14} className="text-ts-text-muted flex-shrink-0 mt-0.5" />
-                      )}
-                      <div className="min-w-0">
-                        <div className={["font-mono truncate", file.missing ? "text-ts-error" : "text-ts-text"].join(" ")}>
-                          {file.path}
-                        </div>
-                        <div className="text-ts-text-muted mt-0.5">
-                          {file.missing ? (
-                            <span className="text-ts-error font-medium">Missing</span>
-                          ) : (
-                            file.purpose
-                          )}
+              {/* Files to Load (v1.8 style — hidden if empty) */}
+              {pkg.filesToLoad.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-ts-text-muted mb-2">
+                    Files to Load
+                  </h3>
+                  <div className="space-y-1.5">
+                    {pkg.filesToLoad.map((file) => (
+                      <div
+                        key={file.path}
+                        className={[
+                          "flex items-start gap-2.5 rounded-lg px-3 py-2 text-xs",
+                          file.missing
+                            ? "bg-ts-error/10 border border-ts-error/30"
+                            : "bg-ts-surface-alt",
+                        ].join(" ")}
+                      >
+                        {file.missing ? (
+                          <AlertTriangle size={14} className="text-ts-error flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <FileText size={14} className="text-ts-text-muted flex-shrink-0 mt-0.5" />
+                        )}
+                        <div className="min-w-0">
+                          <div className={["font-mono truncate", file.missing ? "text-ts-error" : "text-ts-text"].join(" ")}>
+                            {file.path}
+                          </div>
+                          <div className="text-ts-text-muted mt-0.5">
+                            {file.missing ? (
+                              <span className="text-ts-error font-medium">Missing</span>
+                            ) : (
+                              file.purpose
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Startup Prompt */}
-              <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-ts-text-muted mb-2">
-                  Startup Prompt
-                </h3>
-                <div className="bg-ts-surface-alt rounded-lg p-3">
-                  <div className={["text-xs font-mono text-ts-text whitespace-pre-wrap overflow-hidden", promptExpanded ? "" : "line-clamp-3"].join(" ")}>
-                    {pkg.startupPrompt}
+                    ))}
                   </div>
-                  <button
-                    onClick={() => setPromptExpanded((v) => !v)}
-                    className="flex items-center gap-1 mt-2 text-xs text-ts-accent hover:text-ts-accent-hover transition-colors"
-                  >
-                    {promptExpanded ? (
-                      <><ChevronDown size={12} /> Hide prompt</>
-                    ) : (
-                      <><ChevronRight size={12} /> Show full prompt</>
-                    )}
-                  </button>
                 </div>
-              </div>
+              )}
+
+              {/* Startup Prompt (v1.8 style — hidden if empty) */}
+              {pkg.startupPrompt && (
+                <div>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-ts-text-muted mb-2">
+                    Startup Prompt
+                  </h3>
+                  <div className="bg-ts-surface-alt rounded-lg p-3">
+                    <div className={["text-xs font-mono text-ts-text whitespace-pre-wrap overflow-hidden", promptExpanded ? "" : "line-clamp-3"].join(" ")}>
+                      {pkg.startupPrompt}
+                    </div>
+                    <button
+                      onClick={() => setPromptExpanded((v) => !v)}
+                      className="flex items-center gap-1 mt-2 text-xs text-ts-accent hover:text-ts-accent-hover transition-colors"
+                    >
+                      {promptExpanded ? (
+                        <><ChevronDown size={12} /> Hide prompt</>
+                      ) : (
+                        <><ChevronRight size={12} /> Show full prompt</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Expected Output */}
-              <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-ts-text-muted mb-2">
-                  Expected Output
-                </h3>
-                <div className="font-mono text-xs text-ts-text bg-ts-surface-alt rounded-lg px-3 py-2">
-                  {pkg.expectedOutput || <span className="text-ts-text-muted italic">Not specified</span>}
+              {pkg.expectedOutput && (
+                <div>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-ts-text-muted mb-2">
+                    Expected Output
+                  </h3>
+                  <div className="font-mono text-xs text-ts-text bg-ts-surface-alt rounded-lg px-3 py-2">
+                    {pkg.expectedOutput}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Terminal Command */}
               {pkg.terminalCommand && (

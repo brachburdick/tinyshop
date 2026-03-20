@@ -8,7 +8,7 @@ import {
   createContext,
   useContext,
 } from "react";
-import type { SSEEvent, ArtifactRecord, RoleStatus } from "@/types";
+import type { SSEEvent, ArtifactRecord, EntityStatus } from "@/types";
 
 // ─── SSE Connection Status ────────────────────────────────────────────────────
 
@@ -187,21 +187,21 @@ export function useArtifacts() {
   return { artifacts, loading };
 }
 
-// ─── useRoleStatuses ──────────────────────────────────────────────────────────
+// ─── useEntityStatuses ───────────────────────────────────────────────────────
 
 /**
- * Tracks role statuses from SSE status-update events.
+ * Tracks entity statuses from SSE status-update events.
  * Requires SSEProvider in the tree.
  */
-export function useRoleStatuses() {
-  const [statuses, setStatuses] = useState<Map<string, RoleStatus>>(new Map());
+export function useEntityStatuses() {
+  const [statuses, setStatuses] = useState<Map<string, EntityStatus>>(new Map());
 
   useSSEListener(
     useCallback((event: SSEEvent) => {
       if (event.type === "status-update") {
         setStatuses((prev) => {
           const next = new Map(prev);
-          next.set(event.data.role, event.data.status);
+          next.set(event.data.entityId, event.data.status);
           return next;
         });
       }
@@ -210,3 +210,6 @@ export function useRoleStatuses() {
 
   return statuses;
 }
+
+/** @deprecated Use useEntityStatuses instead */
+export const useRoleStatuses = useEntityStatuses;

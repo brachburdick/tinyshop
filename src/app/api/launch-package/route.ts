@@ -1,9 +1,10 @@
 /**
- * GET /api/launch-package?role={role}
+ * GET /api/launch-package?entity={entityId}
  *
- * Returns a LaunchPackage for the specified role.
- * 400 if role param is missing.
- * 404 if the startup prompt for that role doesn't exist.
+ * Returns a LaunchPackage for the specified entity.
+ * Also accepts ?role= for backward compatibility.
+ * 400 if entity param is missing.
+ * 404 if the entity is not found in the manifest.
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -14,11 +15,11 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(req.url);
-  const role = searchParams.get("role");
+  const entityId = searchParams.get("entity") ?? searchParams.get("role");
 
-  if (!role) {
+  if (!entityId) {
     return NextResponse.json(
-      { error: "Missing required query param: role" },
+      { error: "Missing required query param: entity" },
       { status: 400 }
     );
   }
@@ -30,11 +31,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "No project attached" }, { status: 404 });
   }
 
-  const launchPackage = assembleLaunchPackage(role, projectPath);
+  const launchPackage = assembleLaunchPackage(entityId, projectPath);
 
   if (!launchPackage) {
     return NextResponse.json(
-      { error: `Startup prompt not found for role: ${role}` },
+      { error: `Entity not found in manifest: ${entityId}` },
       { status: 404 }
     );
   }

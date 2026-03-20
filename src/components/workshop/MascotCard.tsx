@@ -2,20 +2,20 @@
 
 import { useRef, useEffect, useState } from "react";
 import { Mascot } from "@/components/ui/mascot";
-import type { MascotRole } from "@/components/ui/mascot";
-import type { RoleStatus } from "@/types";
+import type { EntityStatus } from "@/types";
 
 interface MascotCardProps {
-  role: MascotRole;
+  entityId: string;
+  mascotSprite: string | null;
   label: string;
   description: string;
-  status: RoleStatus;
+  status: EntityStatus;
   isRecommended: boolean;
   isOpen: boolean;
   onClick: () => void;
 }
 
-const STATUS_LABEL: Record<RoleStatus, string> = {
+const STATUS_LABEL: Record<EntityStatus, string> = {
   idle: "Ready",
   launched: "Launched",
   "awaiting-output": "Working\u2026",
@@ -23,7 +23,8 @@ const STATUS_LABEL: Record<RoleStatus, string> = {
 };
 
 export function MascotCard({
-  role,
+  entityId,
+  mascotSprite,
   label,
   description,
   status,
@@ -34,7 +35,6 @@ export function MascotCard({
   const [pulse, setPulse] = useState(false);
   const cardRef = useRef<HTMLButtonElement>(null);
 
-  // Expose scroll-and-pulse to parent via ref
   useEffect(() => {
     if ((cardRef.current as HTMLButtonElement & { triggerPulse?: () => void })) {
       (cardRef.current as HTMLButtonElement & { triggerPulse?: () => void }).triggerPulse = () => {
@@ -76,10 +76,16 @@ export function MascotCard({
         isOpen ? "ring-2 ring-ts-accent ring-offset-1" : "",
       ].join(" ")}
       aria-pressed={isOpen}
-      id={`mascot-card-${role}`}
+      id={`mascot-card-${entityId}`}
     >
       <div className="flex items-start gap-3">
-        <Mascot role={role} size={48} />
+        {mascotSprite ? (
+          <Mascot sprite={mascotSprite} size={48} />
+        ) : (
+          <div className="w-12 h-12 rounded-full bg-ts-surface-alt flex items-center justify-center text-ts-text-muted text-lg font-bold">
+            {label.charAt(0)}
+          </div>
+        )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-semibold text-ts-text truncate">

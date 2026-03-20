@@ -6,17 +6,36 @@ import { StatusBoard } from "@/components/workshop/StatusBoard";
 import { NextActionBanner } from "@/components/workshop/NextActionBanner";
 import { DecisionQueue } from "@/components/workshop/DecisionQueue";
 import { LaunchDrawer } from "@/components/workshop/LaunchDrawer";
-import { useRoleStatuses, useSSEListener } from "@/hooks/useSSE";
+import { useEntityStatuses, useSSEListener } from "@/hooks/useSSE";
 import type { NextAction } from "@/types";
+import type { PipelineManifest, ManifestEntity } from "@/lib/types/manifest";
 
 export function WorkshopClient() {
-  const [openRole, setOpenRole] = useState<string | null>(null);
+  const [openEntityId, setOpenEntityId] = useState<string | null>(null);
   const [nextAction, setNextAction] = useState<NextAction | null>(null);
   const [nextActionLoading, setNextActionLoading] = useState(true);
   const [projectError, setProjectError] = useState<string | null>(null);
-  const statuses = useRoleStatuses();
+  const [entities, setEntities] = useState<ManifestEntity[]>([]);
+  const [manifestLoading, setManifestLoading] = useState(true);
+  const statuses = useEntityStatuses();
   const router = useRouter();
   const cardGridRef = useRef<HTMLDivElement>(null);
+
+  // Fetch manifest for entity list
+  useEffect(() => {
+    fetch("/api/manifest")
+      .then((res) => {
+        if (!res.ok) throw new Error("No manifest");
+        return res.json() as Promise<PipelineManifest>;
+      })
+      .then((manifest) => {
+        setEntities(manifest.entities);
+      })
+      .catch(() => {
+        // fallback: empty entities
+      })
+      .finally(() => setManifestLoading(false));
+  }, []);
 
   const fetchNextAction = useCallback(async () => {
     try {
@@ -36,7 +55,7 @@ export function WorkshopClient() {
     fetchNextAction();
   }, [fetchNextAction]);
 
-  // Re-fetch next action when a role completes; surface project-level errors
+  // Re-fetch next action when an entity completes; surface project-level errors
   useSSEListener(
     useCallback(
       (event) => {
@@ -53,26 +72,27 @@ export function WorkshopClient() {
     )
   );
 
-  const handleCardClick = useCallback((role: string) => {
-    setOpenRole((prev) => (prev === role ? null : role));
+  const handleCardClick = useCallback((entityId: string) => {
+    setOpenEntityId((prev) => (prev === entityId ? null : entityId));
   }, []);
 
   const handleGoClick = useCallback(
-    (role: string) => {
-      // Scroll to card and pulse it
+    (entityId: string) => {
       if (cardGridRef.current) {
         const cardEl = cardGridRef.current.querySelector(
-          `#mascot-card-${role}`
+          `#mascot-card-${entityId}`
         ) as (HTMLButtonElement & { triggerPulse?: () => void }) | null;
         if (cardEl?.triggerPulse) {
           cardEl.triggerPulse();
         }
       }
-      // Open drawer
-      setOpenRole(role);
+      setOpenEntityId(entityId);
     },
     []
   );
+
+  // Find the mascot sprite for the open entity
+  const openEntity = entities.find((e) => e.id === openEntityId);
 
   if (projectError) {
     return (
@@ -98,6 +118,8 @@ export function WorkshopClient() {
     );
   }
 
+  const loading = nextActionLoading || manifestLoading;
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-ts-text mb-4">Workshop</h1>
@@ -111,12 +133,12 @@ export function WorkshopClient() {
       </div>
 
       <div ref={cardGridRef}>
-        {nextActionLoading ? (
+        {loading ? (
           <div
             className="grid gap-4 mb-6"
             style={{ gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}
           >
-            {Array.from({ length: 7 }).map((_, i) => (
+            {Array.from({ length: entities.length || 4 }).map((_, i) => (
               <div
                 key={i}
                 className="h-[120px] rounded-xl bg-ts-surface-alt border border-ts-border animate-pulse"
@@ -125,9 +147,10 @@ export function WorkshopClient() {
           </div>
         ) : (
           <StatusBoard
+            entities={entities}
             statuses={statuses}
-            recommendedRole={nextAction?.role ?? null}
-            openRole={openRole}
+            recommendedEntityId={nextAction?.entityId ?? null}
+            openEntityId={openEntityId}
             onCardClick={handleCardClick}
           />
         )}
@@ -136,9 +159,10 @@ export function WorkshopClient() {
       <DecisionQueue />
 
       <LaunchDrawer
-        role={openRole}
-        isOpen={openRole !== null}
-        onClose={() => setOpenRole(null)}
+        entityId={openEntityId}
+        mascotSprite={openEntity?.mascotSprite ?? null}
+        isOpen={openEntityId !== null}
+        onClose={() => setOpenEntityId(null)}
       />
     </div>
   );

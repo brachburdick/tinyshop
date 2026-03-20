@@ -2,12 +2,11 @@
  * GET /api/artifacts
  *
  * Returns all indexed artifact records.
- * Optional query param: ?type=ArtifactType
+ * Optional query param: ?type=string to filter by artifact type.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { getArtifactIndex } from "@/lib/artifact-engine/singleton";
-import type { ArtifactType } from "@/types/index";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +18,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   }
 
   const { searchParams } = new URL(req.url);
-  const typeParam = searchParams.get("type") as ArtifactType | null;
+  const typeParam = searchParams.get("type");
 
   const artifacts = typeParam ? index.getByType(typeParam) : index.getAll();
 

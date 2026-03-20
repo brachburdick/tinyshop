@@ -1,78 +1,54 @@
 /**
  * Frontmatter parser for protocol artifacts.
- * Uses gray-matter to extract YAML frontmatter and derives ArtifactType
- * from file path conventions. Never throws — returns a parse-error record
- * on malformed input.
+ * Uses gray-matter to extract YAML frontmatter and derives artifact type
+ * from the pipeline manifest's artifact type rules. Never throws — returns
+ * a parse-error record on malformed input.
  */
 
 import matter from "gray-matter";
 import path from "path";
 import fs from "fs";
-import type { ArtifactRecord, ArtifactType } from "@/types/index";
+import type { ArtifactRecord } from "@/types/index";
+import type { ManifestArtifactType } from "@/lib/types/manifest";
+import { getManifest } from "@/lib/manifest";
 
 /**
- * Derive an ArtifactType from the file path and optional frontmatter data.
- * Path conventions take precedence; frontmatter can refine the result.
+ * Derive an artifact type from the file path and optional frontmatter data,
+ * using manifest-defined rules. Rules are checked in order; first match wins.
+ *
+ * If artifactTypeRules is not provided, returns the frontmatter override
+ * or "unknown".
  */
 export function deriveArtifactType(
   filePath: string,
-  frontmatter: Record<string, unknown>
-): ArtifactType {
+  frontmatter: Record<string, unknown>,
+  artifactTypeRules?: ManifestArtifactType[]
+): string {
+  // Explicit frontmatter override always wins
+  const fmType = frontmatter["artifact_type"];
+  if (typeof fmType === "string" && fmType.length > 0) {
+    return fmType;
+  }
+
+  if (!artifactTypeRules) return "unknown";
+
   const normalized = filePath.replace(/\\/g, "/").toLowerCase();
   const basename = path.basename(normalized);
 
-  // Explicit frontmatter override
-  const fmType = frontmatter["artifact_type"] as string | undefined;
-  if (fmType) {
-    const valid: ArtifactType[] = [
-      "spec",
-      "plan",
-      "tasks",
-      "session-summary",
-      "handoff-packet",
-      "validator-verdict",
-      "qa-verdict",
-      "research-request",
-      "research-findings",
-      "orchestrator-state",
-    ];
-    if (valid.includes(fmType as ArtifactType)) {
-      return fmType as ArtifactType;
+  for (const entry of artifactTypeRules) {
+    for (const rule of entry.rules) {
+      switch (rule.matchType) {
+        case "basename":
+          if (basename === rule.value.toLowerCase()) return entry.type;
+          break;
+        case "pathContains":
+          if (normalized.includes(rule.value.toLowerCase())) return entry.type;
+          break;
+        case "frontmatterField":
+          if (frontmatter[rule.value] !== undefined) return entry.type;
+          break;
+      }
     }
-  }
-
-  // Path-based derivation — more specific patterns checked first to avoid
-  // a broad match (e.g. /specs/) swallowing a session-summary inside specs/.
-
-  if (basename === "orchestrator-state.md" || normalized.includes("orchestrator-state")) {
-    return "orchestrator-state";
-  }
-  if (normalized.includes("session-summary") || normalized.includes("session_summary")) {
-    return "session-summary";
-  }
-  if (normalized.includes("handoff")) {
-    return "handoff-packet";
-  }
-  if (normalized.includes("validator-verdict")) {
-    return "validator-verdict";
-  }
-  if (normalized.includes("qa-verdict")) {
-    return "qa-verdict";
-  }
-  if (normalized.includes("research-request")) {
-    return "research-request";
-  }
-  if (normalized.includes("research-findings")) {
-    return "research-findings";
-  }
-  if (normalized.includes("/specs/") || basename.startsWith("spec-") || basename === "spec.md") {
-    return "spec";
-  }
-  if (normalized.includes("/plans/") || basename.startsWith("plan-") || basename === "plan.md") {
-    return "plan";
-  }
-  if (basename === "tasks.md" || basename.startsWith("tasks-") || normalized.includes("/tasks/")) {
-    return "tasks";
   }
 
   return "unknown";
@@ -83,10 +59,24 @@ export function deriveArtifactType(
  * Returns an ArtifactRecord with status "parse-error" if the file is
  * unreadable or its frontmatter is malformed — never throws.
  *
- * @param filePath  Absolute path to the .md file
- * @param projectRoot  Absolute path to the project root (for relative path calculation)
+ * @param filePath         Absolute path to the .md file
+ * @param projectRoot      Absolute path to the project root
+ * @param artifactTypeRules  Rules from the pipeline manifest (auto-loaded if omitted)
  */
-export function parseArtifact(filePath: string, projectRoot: string): ArtifactRecord {
+export function parseArtifact(
+  filePath: string,
+  projectRoot: string,
+  artifactTypeRules?: ManifestArtifactType[]
+): ArtifactRecord {
+  // Auto-load rules from manifest if not provided
+  if (!artifactTypeRules) {
+    try {
+      const manifest = getManifest(projectRoot);
+      artifactTypeRules = manifest.artifactTypes;
+    } catch {
+      // If manifest loading fails, proceed without rules
+    }
+  }
   const name = path.basename(filePath, ".md");
   const relativePath = path.relative(projectRoot, filePath);
 
@@ -121,7 +111,7 @@ export function parseArtifact(filePath: string, projectRoot: string): ArtifactRe
     return {
       path: relativePath,
       name,
-      type: deriveArtifactType(filePath, {}),
+      type: deriveArtifactType(filePath, {}, artifactTypeRules),
       status: "parse-error",
       supersedes: null,
       superseded_by: null,
@@ -154,7 +144,7 @@ export function parseArtifact(filePath: string, projectRoot: string): ArtifactRe
   return {
     path: relativePath,
     name,
-    type: deriveArtifactType(filePath, fm),
+    type: deriveArtifactType(filePath, fm, artifactTypeRules),
     status,
     supersedes,
     superseded_by,
