@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- TINY Kickstart: Energetic, motion lines, flowing hair — the launcher -->
+
+  <!-- Motion lines behind -->
+  <line x1="20" y1="100" x2="45" y2="100" stroke="#F59E0B" stroke-width="2" opacity="0.4" stroke-linecap="round" />
+  <line x1="15" y1="120" x2="40" y2="118" stroke="#F59E0B" stroke-width="2" opacity="0.3" stroke-linecap="round" />
+  <line x1="25" y1="80" x2="48" y2="82" stroke="#F59E0B" stroke-width="2" opacity="0.3" stroke-linecap="round" />
+
+  <!-- Sparkle effects -->
+  <path d="M 155 50 L 158 45 L 161 50 L 166 53 L 161 56 L 158 61 L 155 56 L 150 53 Z" fill="#FBBF24" opacity="0.7" />
+  <path d="M 170 75 L 172 72 L 174 75 L 177 77 L 174 79 L 172 82 L 170 79 L 167 77 Z" fill="#FBBF24" opacity="0.5" />
+
+  <!-- Body — leaning forward, dynamic pose -->
+  <rect x="75" y="118" width="56" height="46" rx="10" fill="#F97316" transform="rotate(-5 103 141)" />
+  <!-- Lightning bolt on chest -->
+  <polygon points="98,125 105,125 101,136 107,136 95,152 99,140 93,140" fill="#FDE68A" />
+
+  <!-- Arms — one reaching forward -->
+  <rect x="42" y="120" width="34" height="8" rx="4" fill="#F97316" transform="rotate(-10 59 124)" />
+  <rect x="130" y="124" width="28" height="8" rx="4" fill="#F97316" transform="rotate(10 144 128)" />
+
+  <!-- Head — slight tilt for dynamism -->
+  <circle cx="100" cy="86" r="27" fill="#FDE68A" />
+
+  <!-- Flowing hair — swept back like running into the wind -->
+  <path d="M 75 76 Q 70 50 90 48 Q 110 46 120 50 Q 140 55 155 42" stroke="none" fill="#EA580C" />
+  <path d="M 72 82 Q 65 58 88 52 Q 108 50 125 55 Q 148 60 165 48" stroke="none" fill="#EA580C" opacity="0.6" />
+  <path d="M 78 86 Q 72 65 92 56 Q 112 54 128 58 Q 145 63 158 55" stroke="none" fill="#C2410C" opacity="0.4" />
+
+  <!-- Eyes — excited, wide open -->
+  <circle cx="89" cy="84" r="5" fill="#1C1917" />
+  <circle cx="111" cy="84" r="5" fill="#1C1917" />
+  <circle cx="90.5" cy="82" r="2.2" fill="white" />
+  <circle cx="112.5" cy="82" r="2.2" fill="white" />
+  <!-- Excited eyebrows raised -->
+  <path d="M 82 74 Q 89 70 95 74" stroke="#1C1917" stroke-width="2" fill="none" stroke-linecap="round" />
+  <path d="M 105 74 Q 111 70 118 74" stroke="#1C1917" stroke-width="2" fill="none" stroke-linecap="round" />
+
+  <!-- Open excited mouth -->
+  <ellipse cx="100" cy="100" rx="8" ry="6" fill="#1C1917" />
+  <ellipse cx="100" cy="98" rx="6" ry="3" fill="#FDE68A" />
+
+  <!-- Rocket in right hand -->
+  <polygon points="162,108 170,90 178,108" fill="#EF4444" />
+  <rect x="164" y="108" width="12" height="14" rx="2" fill="#6B7280" />
+  <!-- Rocket flame -->
+  <polygon points="166,122 170,132 174,122" fill="#FBBF24" />
+  <polygon points="168,122 170,128 172,122" fill="#FDE68A" />
+
+  <!-- Legs — running pose -->
+  <rect x="78" y="162" width="13" height="20" rx="5" fill="#C2410C" transform="rotate(-15 84 172)" />
+  <rect x="108" y="162" width="13" height="20" rx="5" fill="#C2410C" transform="rotate(10 114 172)" />
+
+  <!-- Sneakers -->
+  <ellipse cx="82" cy="184" rx="10" ry="5" fill="#9A3412" transform="rotate(-15 82 184)" />
+  <ellipse cx="116" cy="186" rx="10" ry="5" fill="#9A3412" transform="rotate(10 116 186)" />
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- TINY Developer: Bunny-eared hero with cape/shield — the scrappy coder -->
+
+  <!-- Cape -->
+  <path d="M 75 115 L 55 175 Q 100 185 145 175 L 125 115" fill="#DC2626" opacity="0.85" />
+  <path d="M 75 115 L 60 170 Q 100 178 140 170 L 125 115" fill="#EF4444" opacity="0.5" />
+
+  <!-- Body -->
+  <rect x="72" y="118" width="56" height="48" rx="10" fill="#3B82F6" />
+  <!-- Code symbol on chest -->
+  <text x="100" y="148" text-anchor="middle" font-family="monospace" font-size="18" font-weight="bold" fill="#DBEAFE">&lt;/&gt;</text>
+
+  <!-- Arms -->
+  <rect x="48" y="122" width="24" height="8" rx="4" fill="#3B82F6" />
+  <rect x="128" y="122" width="24" height="8" rx="4" fill="#3B82F6" />
+
+  <!-- Head -->
+  <circle cx="100" cy="88" r="28" fill="#FDE68A" />
+
+  <!-- Bunny Ears -->
+  <ellipse cx="80" cy="42" rx="10" ry="26" fill="#FDE68A" />
+  <ellipse cx="80" cy="42" rx="6" ry="20" fill="#FBBF24" opacity="0.4" />
+  <ellipse cx="120" cy="42" rx="10" ry="26" fill="#FDE68A" />
+  <ellipse cx="120" cy="42" rx="6" ry="20" fill="#FBBF24" opacity="0.4" />
+
+  <!-- Eyes - determined -->
+  <circle cx="89" cy="86" r="4.5" fill="#1C1917" />
+  <circle cx="111" cy="86" r="4.5" fill="#1C1917" />
+  <circle cx="90.5" cy="84.5" r="1.8" fill="white" />
+  <circle cx="112.5" cy="84.5" r="1.8" fill="white" />
+  <!-- Slight eyebrow determination -->
+  <line x1="83" y1="77" x2="93" y2="79" stroke="#1C1917" stroke-width="2" stroke-linecap="round" />
+  <line x1="117" y1="77" x2="107" y2="79" stroke="#1C1917" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Grin -->
+  <path d="M 91 100 Q 100 108 109 100" stroke="#1C1917" stroke-width="2.5" fill="none" stroke-linecap="round" />
+
+  <!-- Shield in left hand -->
+  <path d="M 30 118 L 48 110 L 48 138 L 30 145 L 12 138 L 12 110 Z" fill="#1D4ED8" stroke="#60A5FA" stroke-width="2" />
+  <path d="M 30 116 L 30 140" stroke="#60A5FA" stroke-width="2" />
+  <path d="M 18 124 L 42 124" stroke="#60A5FA" stroke-width="2" />
+
+  <!-- Legs -->
+  <rect x="80" y="164" width="14" height="18" rx="5" fill="#1E40AF" />
+  <rect x="106" y="164" width="14" height="18" rx="5" fill="#1E40AF" />
+
+  <!-- Sneakers -->
+  <ellipse cx="87" cy="184" rx="10" ry="5" fill="#1E3A8A" />
+  <ellipse cx="113" cy="184" rx="10" ry="5" fill="#1E3A8A" />
+</svg>

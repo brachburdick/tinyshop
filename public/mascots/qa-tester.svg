@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- TINY QA-Tester: Baseball cap, bat — the slugger who smashes bugs -->
+
+  <!-- Body / Jersey -->
+  <rect x="70" y="120" width="60" height="48" rx="10" fill="#E11D48" />
+  <!-- Jersey number -->
+  <text x="100" y="150" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold" fill="white" opacity="0.9">QA</text>
+
+  <!-- Arms -->
+  <rect x="46" y="124" width="24" height="8" rx="4" fill="#E11D48" />
+  <rect x="130" y="118" width="24" height="8" rx="4" fill="#E11D48" transform="rotate(-25 142 122)" />
+
+  <!-- Head -->
+  <circle cx="100" cy="88" r="28" fill="#FBBF24" />
+
+  <!-- Baseball Cap -->
+  <path d="M 68 82 Q 70 60 100 56 Q 130 60 132 82" fill="#1D4ED8" />
+  <!-- Cap brim -->
+  <ellipse cx="90" cy="82" rx="32" ry="8" fill="#1E3A8A" />
+  <!-- Cap button -->
+  <circle cx="100" cy="56" r="3" fill="#3B82F6" />
+  <!-- Cap panel line -->
+  <line x1="100" y1="56" x2="100" y2="82" stroke="#2563EB" stroke-width="1" opacity="0.4" />
+
+  <!-- Eyes - confident -->
+  <circle cx="88" cy="90" r="4" fill="#1C1917" />
+  <circle cx="112" cy="90" r="4" fill="#1C1917" />
+  <circle cx="89.5" cy="88.5" r="1.8" fill="white" />
+  <circle cx="113.5" cy="88.5" r="1.8" fill="white" />
+
+  <!-- Cocky grin -->
+  <path d="M 88 104 Q 100 113 112 104" stroke="#1C1917" stroke-width="2.5" fill="none" stroke-linecap="round" />
+  <!-- Tooth -->
+  <rect x="97" y="104" width="6" height="4" rx="1" fill="white" />
+
+  <!-- Baseball Bat in right hand -->
+  <rect x="148" y="82" width="7" height="48" rx="3.5" fill="#D97706" transform="rotate(-20 151 106)" />
+  <!-- Bat knob -->
+  <circle cx="154" cy="132" r="5" fill="#B45309" transform="rotate(-20 151 106)" />
+  <!-- Bat barrel -->
+  <ellipse cx="150" cy="82" rx="5.5" ry="8" fill="#FBBF24" transform="rotate(-20 150 82)" />
+
+  <!-- Legs -->
+  <rect x="80" y="166" width="14" height="18" rx="5" fill="#9F1239" />
+  <rect x="106" y="166" width="14" height="18" rx="5" fill="#9F1239" />
+
+  <!-- Cleats -->
+  <ellipse cx="87" cy="186" rx="10" ry="5" fill="#881337" />
+  <ellipse cx="113" cy="186" rx="10" ry="5" fill="#881337" />
+</svg>
