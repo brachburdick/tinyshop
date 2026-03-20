@@ -1,0 +1,260 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none">
+  <!--
+    TINY Mascot Sprite Sheet
+    Usage: <svg><use href="/mascots/sprites.svg#architect" /></svg>
+    Available IDs: architect, designer, developer, kickstart, orchestrator, researcher, qa-tester, validator
+  -->
+
+  <!-- ========== ARCHITECT ========== -->
+  <symbol id="architect" viewBox="0 0 200 200">
+    <rect x="70" y="120" width="60" height="50" rx="10" fill="#D97706" />
+    <rect x="50" y="125" width="20" height="8" rx="4" fill="#D97706" />
+    <rect x="130" y="125" width="25" height="8" rx="4" fill="#D97706" transform="rotate(-30 142 129)" />
+    <circle cx="100" cy="95" r="30" fill="#FBBF24" />
+    <ellipse cx="100" cy="72" rx="36" ry="12" fill="#F59E0B" />
+    <rect x="72" y="60" width="56" height="14" rx="6" fill="#F59E0B" />
+    <rect x="85" y="52" width="30" height="12" rx="4" fill="#D97706" />
+    <ellipse cx="100" cy="72" rx="34" ry="10" fill="none" stroke="#FBBF24" stroke-width="1" opacity="0.4" />
+    <circle cx="88" cy="92" r="4" fill="#1C1917" />
+    <circle cx="112" cy="92" r="4" fill="#1C1917" />
+    <circle cx="89.5" cy="90.5" r="1.5" fill="white" />
+    <circle cx="113.5" cy="90.5" r="1.5" fill="white" />
+    <path d="M 90 106 Q 100 112 110 106" stroke="#1C1917" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <rect x="148" y="100" width="6" height="30" rx="2" fill="#78350F" transform="rotate(-30 151 115)" />
+    <rect x="143" y="92" width="18" height="12" rx="3" fill="#6B7280" transform="rotate(-30 152 98)" />
+    <rect x="80" y="168" width="14" height="20" rx="5" fill="#92400E" />
+    <rect x="106" y="168" width="14" height="20" rx="5" fill="#92400E" />
+    <ellipse cx="87" cy="190" rx="10" ry="5" fill="#78350F" />
+    <ellipse cx="113" cy="190" rx="10" ry="5" fill="#78350F" />
+  </symbol>
+
+  <!-- ========== DESIGNER ========== -->
+  <symbol id="designer" viewBox="0 0 200 200">
+    <rect x="68" y="120" width="64" height="50" rx="12" fill="#A78BFA" />
+    <circle cx="82" cy="140" r="3" fill="#F472B6" opacity="0.7" />
+    <circle cx="118" cy="148" r="2.5" fill="#34D399" opacity="0.7" />
+    <circle cx="95" cy="155" r="2" fill="#FBBF24" opacity="0.7" />
+    <rect x="45" y="128" width="24" height="8" rx="4" fill="#A78BFA" />
+    <rect x="131" y="128" width="24" height="8" rx="4" fill="#A78BFA" />
+    <circle cx="100" cy="90" r="30" fill="#FDE68A" />
+    <path d="M 65 85 Q 65 55 100 52 Q 135 55 135 85 L 138 108 Q 130 112 128 100 L 128 85 Q 128 65 100 62 Q 72 65 72 85 L 72 100 Q 70 112 62 108 Z" fill="#4C1D95" />
+    <path d="M 72 80 Q 80 68 100 66 Q 120 68 128 80 L 126 78 Q 118 72 100 70 Q 82 72 74 78 Z" fill="#5B21B6" />
+    <ellipse cx="100" cy="60" rx="28" ry="10" fill="#7C3AED" />
+    <circle cx="100" cy="50" r="5" fill="#7C3AED" />
+    <ellipse cx="100" cy="60" rx="26" ry="8" fill="none" stroke="#8B5CF6" stroke-width="1" opacity="0.5" />
+    <ellipse cx="87" cy="90" rx="5" ry="5.5" fill="#1C1917" />
+    <ellipse cx="113" cy="90" rx="5" ry="5.5" fill="#1C1917" />
+    <circle cx="89" cy="88" r="2" fill="white" />
+    <circle cx="115" cy="88" r="2" fill="white" />
+    <path d="M 90 104 Q 100 111 110 104" stroke="#1C1917" stroke-width="2" fill="none" stroke-linecap="round" />
+    <rect x="30" y="118" width="4" height="28" rx="2" fill="#78350F" transform="rotate(20 32 132)" />
+    <path d="M 28 116 L 34 116 L 32 108 Z" fill="#EC4899" transform="rotate(20 31 112)" />
+    <rect x="80" y="168" width="12" height="18" rx="5" fill="#6D28D9" />
+    <rect x="108" y="168" width="12" height="18" rx="5" fill="#6D28D9" />
+    <ellipse cx="86" cy="188" rx="9" ry="5" fill="#4C1D95" />
+    <ellipse cx="114" cy="188" rx="9" ry="5" fill="#4C1D95" />
+  </symbol>
+
+  <!-- ========== DEVELOPER ========== -->
+  <symbol id="developer" viewBox="0 0 200 200">
+    <path d="M 75 115 L 55 175 Q 100 185 145 175 L 125 115" fill="#DC2626" opacity="0.85" />
+    <path d="M 75 115 L 60 170 Q 100 178 140 170 L 125 115" fill="#EF4444" opacity="0.5" />
+    <rect x="72" y="118" width="56" height="48" rx="10" fill="#3B82F6" />
+    <text x="100" y="148" text-anchor="middle" font-family="monospace" font-size="18" font-weight="bold" fill="#DBEAFE">&lt;/&gt;</text>
+    <rect x="48" y="122" width="24" height="8" rx="4" fill="#3B82F6" />
+    <rect x="128" y="122" width="24" height="8" rx="4" fill="#3B82F6" />
+    <circle cx="100" cy="88" r="28" fill="#FDE68A" />
+    <ellipse cx="80" cy="42" rx="10" ry="26" fill="#FDE68A" />
+    <ellipse cx="80" cy="42" rx="6" ry="20" fill="#FBBF24" opacity="0.4" />
+    <ellipse cx="120" cy="42" rx="10" ry="26" fill="#FDE68A" />
+    <ellipse cx="120" cy="42" rx="6" ry="20" fill="#FBBF24" opacity="0.4" />
+    <circle cx="89" cy="86" r="4.5" fill="#1C1917" />
+    <circle cx="111" cy="86" r="4.5" fill="#1C1917" />
+    <circle cx="90.5" cy="84.5" r="1.8" fill="white" />
+    <circle cx="112.5" cy="84.5" r="1.8" fill="white" />
+    <line x1="83" y1="77" x2="93" y2="79" stroke="#1C1917" stroke-width="2" stroke-linecap="round" />
+    <line x1="117" y1="77" x2="107" y2="79" stroke="#1C1917" stroke-width="2" stroke-linecap="round" />
+    <path d="M 91 100 Q 100 108 109 100" stroke="#1C1917" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M 30 118 L 48 110 L 48 138 L 30 145 L 12 138 L 12 110 Z" fill="#1D4ED8" stroke="#60A5FA" stroke-width="2" />
+    <path d="M 30 116 L 30 140" stroke="#60A5FA" stroke-width="2" />
+    <path d="M 18 124 L 42 124" stroke="#60A5FA" stroke-width="2" />
+    <rect x="80" y="164" width="14" height="18" rx="5" fill="#1E40AF" />
+    <rect x="106" y="164" width="14" height="18" rx="5" fill="#1E40AF" />
+    <ellipse cx="87" cy="184" rx="10" ry="5" fill="#1E3A8A" />
+    <ellipse cx="113" cy="184" rx="10" ry="5" fill="#1E3A8A" />
+  </symbol>
+
+  <!-- ========== KICKSTART ========== -->
+  <symbol id="kickstart" viewBox="0 0 200 200">
+    <line x1="20" y1="100" x2="45" y2="100" stroke="#F59E0B" stroke-width="2" opacity="0.4" stroke-linecap="round" />
+    <line x1="15" y1="120" x2="40" y2="118" stroke="#F59E0B" stroke-width="2" opacity="0.3" stroke-linecap="round" />
+    <line x1="25" y1="80" x2="48" y2="82" stroke="#F59E0B" stroke-width="2" opacity="0.3" stroke-linecap="round" />
+    <path d="M 155 50 L 158 45 L 161 50 L 166 53 L 161 56 L 158 61 L 155 56 L 150 53 Z" fill="#FBBF24" opacity="0.7" />
+    <path d="M 170 75 L 172 72 L 174 75 L 177 77 L 174 79 L 172 82 L 170 79 L 167 77 Z" fill="#FBBF24" opacity="0.5" />
+    <rect x="75" y="118" width="56" height="46" rx="10" fill="#F97316" transform="rotate(-5 103 141)" />
+    <polygon points="98,125 105,125 101,136 107,136 95,152 99,140 93,140" fill="#FDE68A" />
+    <rect x="42" y="120" width="34" height="8" rx="4" fill="#F97316" transform="rotate(-10 59 124)" />
+    <rect x="130" y="124" width="28" height="8" rx="4" fill="#F97316" transform="rotate(10 144 128)" />
+    <circle cx="100" cy="86" r="27" fill="#FDE68A" />
+    <path d="M 75 76 Q 70 50 90 48 Q 110 46 120 50 Q 140 55 155 42" stroke="none" fill="#EA580C" />
+    <path d="M 72 82 Q 65 58 88 52 Q 108 50 125 55 Q 148 60 165 48" stroke="none" fill="#EA580C" opacity="0.6" />
+    <path d="M 78 86 Q 72 65 92 56 Q 112 54 128 58 Q 145 63 158 55" stroke="none" fill="#C2410C" opacity="0.4" />
+    <circle cx="89" cy="84" r="5" fill="#1C1917" />
+    <circle cx="111" cy="84" r="5" fill="#1C1917" />
+    <circle cx="90.5" cy="82" r="2.2" fill="white" />
+    <circle cx="112.5" cy="82" r="2.2" fill="white" />
+    <path d="M 82 74 Q 89 70 95 74" stroke="#1C1917" stroke-width="2" fill="none" stroke-linecap="round" />
+    <path d="M 105 74 Q 111 70 118 74" stroke="#1C1917" stroke-width="2" fill="none" stroke-linecap="round" />
+    <ellipse cx="100" cy="100" rx="8" ry="6" fill="#1C1917" />
+    <ellipse cx="100" cy="98" rx="6" ry="3" fill="#FDE68A" />
+    <polygon points="162,108 170,90 178,108" fill="#EF4444" />
+    <rect x="164" y="108" width="12" height="14" rx="2" fill="#6B7280" />
+    <polygon points="166,122 170,132 174,122" fill="#FBBF24" />
+    <polygon points="168,122 170,128 172,122" fill="#FDE68A" />
+    <rect x="78" y="162" width="13" height="20" rx="5" fill="#C2410C" transform="rotate(-15 84 172)" />
+    <rect x="108" y="162" width="13" height="20" rx="5" fill="#C2410C" transform="rotate(10 114 172)" />
+    <ellipse cx="82" cy="184" rx="10" ry="5" fill="#9A3412" transform="rotate(-15 82 184)" />
+    <ellipse cx="116" cy="186" rx="10" ry="5" fill="#9A3412" transform="rotate(10 116 186)" />
+  </symbol>
+
+  <!-- ========== ORCHESTRATOR ========== -->
+  <symbol id="orchestrator" viewBox="0 0 200 200">
+    <rect x="68" y="120" width="64" height="50" rx="10" fill="#1C1917" />
+    <path d="M 72 168 L 65 190 L 82 178" fill="#1C1917" />
+    <path d="M 128 168 L 135 190 L 118 178" fill="#1C1917" />
+    <rect x="82" y="122" width="36" height="30" rx="4" fill="#7C2D12" />
+    <circle cx="100" cy="132" r="2" fill="#FBBF24" />
+    <circle cx="100" cy="142" r="2" fill="#FBBF24" />
+    <rect x="44" y="124" width="24" height="8" rx="4" fill="#1C1917" />
+    <rect x="132" y="120" width="24" height="8" rx="4" fill="#1C1917" transform="rotate(-15 144 124)" />
+    <circle cx="100" cy="88" r="28" fill="#FBBF24" />
+    <rect x="78" y="40" width="44" height="32" rx="4" fill="#1C1917" />
+    <ellipse cx="100" cy="72" rx="30" ry="8" fill="#1C1917" />
+    <ellipse cx="100" cy="72" rx="28" ry="6" fill="none" stroke="#374151" stroke-width="1" />
+    <rect x="80" y="62" width="40" height="5" rx="1" fill="#7C2D12" />
+    <circle cx="114" cy="86" r="8" fill="none" stroke="#FBBF24" stroke-width="2" />
+    <line x1="122" y1="86" x2="130" y2="100" stroke="#FBBF24" stroke-width="1.5" />
+    <circle cx="88" cy="86" r="3.5" fill="#1C1917" />
+    <circle cx="114" cy="86" r="3.5" fill="#1C1917" />
+    <circle cx="89.2" cy="84.5" r="1.5" fill="white" />
+    <circle cx="115.2" cy="84.5" r="1.5" fill="white" />
+    <path d="M 88 98 Q 92 102 100 98 Q 108 102 112 98" stroke="#78350F" stroke-width="3" fill="none" stroke-linecap="round" />
+    <path d="M 86 98 Q 82 96 80 98" stroke="#78350F" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M 114 98 Q 118 96 120 98" stroke="#78350F" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M 95 106 Q 100 109 105 106" stroke="#1C1917" stroke-width="2" fill="none" stroke-linecap="round" />
+    <polygon points="88,120 100,126 100,118" fill="#DC2626" />
+    <polygon points="112,120 100,126 100,118" fill="#DC2626" />
+    <circle cx="100" cy="122" r="3" fill="#EF4444" />
+    <line x1="150" y1="108" x2="170" y2="88" stroke="#FBBF24" stroke-width="3" stroke-linecap="round" />
+    <circle cx="171" cy="87" r="2" fill="white" />
+    <rect x="80" y="168" width="12" height="18" rx="5" fill="#1C1917" />
+    <rect x="108" y="168" width="12" height="18" rx="5" fill="#1C1917" />
+    <ellipse cx="86" cy="188" rx="9" ry="5" fill="#292524" />
+    <ellipse cx="114" cy="188" rx="9" ry="5" fill="#292524" />
+  </symbol>
+
+  <!-- ========== RESEARCHER ========== -->
+  <symbol id="researcher" viewBox="0 0 200 200">
+    <rect x="70" y="120" width="60" height="48" rx="10" fill="#059669" />
+    <line x1="75" y1="135" x2="125" y2="135" stroke="#34D399" stroke-width="1" opacity="0.4" />
+    <line x1="75" y1="140" x2="125" y2="140" stroke="#34D399" stroke-width="1" opacity="0.4" />
+    <rect x="46" y="126" width="24" height="8" rx="4" fill="#059669" />
+    <rect x="130" y="126" width="24" height="8" rx="4" fill="#059669" />
+    <circle cx="100" cy="88" r="28" fill="#FBBF24" />
+    <circle cx="62" cy="88" r="12" fill="#92400E" />
+    <circle cx="62" cy="96" r="10" fill="#92400E" />
+    <circle cx="138" cy="88" r="12" fill="#92400E" />
+    <circle cx="138" cy="96" r="10" fill="#92400E" />
+    <circle cx="68" cy="80" r="4" fill="#F472B6" />
+    <circle cx="132" cy="80" r="4" fill="#F472B6" />
+    <path d="M 72 78 Q 80 58 100 56 Q 120 58 128 78" fill="#92400E" />
+    <path d="M 74 80 Q 82 62 100 60 Q 118 62 126 80" fill="#A16207" opacity="0.3" />
+    <circle cx="88" cy="88" r="10" fill="none" stroke="#374151" stroke-width="2.5" />
+    <circle cx="112" cy="88" r="10" fill="none" stroke="#374151" stroke-width="2.5" />
+    <line x1="98" y1="88" x2="102" y2="88" stroke="#374151" stroke-width="2" />
+    <path d="M 82 84 Q 84 82 87 83" stroke="white" stroke-width="1.5" fill="none" opacity="0.6" />
+    <path d="M 106 84 Q 108 82 111 83" stroke="white" stroke-width="1.5" fill="none" opacity="0.6" />
+    <circle cx="88" cy="89" r="3.5" fill="#1C1917" />
+    <circle cx="112" cy="89" r="3.5" fill="#1C1917" />
+    <circle cx="89.2" cy="87.5" r="1.5" fill="white" />
+    <circle cx="113.2" cy="87.5" r="1.5" fill="white" />
+    <path d="M 93 103 Q 100 108 107 103" stroke="#1C1917" stroke-width="2" fill="none" stroke-linecap="round" />
+    <rect x="24" y="120" width="28" height="22" rx="2" fill="#7C3AED" transform="rotate(-10 38 131)" />
+    <line x1="38" y1="118" x2="38" y2="142" stroke="#6D28D9" stroke-width="2" transform="rotate(-10 38 130)" />
+    <rect x="28" y="122" width="22" height="18" rx="1" fill="#EDE9FE" transform="rotate(-10 39 131)" />
+    <line x1="32" y1="127" x2="46" y2="127" stroke="#A78BFA" stroke-width="1" transform="rotate(-10 39 127)" opacity="0.5" />
+    <line x1="32" y1="131" x2="44" y2="131" stroke="#A78BFA" stroke-width="1" transform="rotate(-10 38 131)" opacity="0.5" />
+    <line x1="32" y1="135" x2="42" y2="135" stroke="#A78BFA" stroke-width="1" transform="rotate(-10 37 135)" opacity="0.5" />
+    <rect x="80" y="166" width="12" height="18" rx="5" fill="#047857" />
+    <rect x="108" y="166" width="12" height="18" rx="5" fill="#047857" />
+    <ellipse cx="86" cy="186" rx="9" ry="5" fill="#064E3B" />
+    <ellipse cx="114" cy="186" rx="9" ry="5" fill="#064E3B" />
+  </symbol>
+
+  <!-- ========== QA-TESTER ========== -->
+  <symbol id="qa-tester" viewBox="0 0 200 200">
+    <rect x="70" y="120" width="60" height="48" rx="10" fill="#E11D48" />
+    <text x="100" y="150" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold" fill="white" opacity="0.9">QA</text>
+    <rect x="46" y="124" width="24" height="8" rx="4" fill="#E11D48" />
+    <rect x="130" y="118" width="24" height="8" rx="4" fill="#E11D48" transform="rotate(-25 142 122)" />
+    <circle cx="100" cy="88" r="28" fill="#FBBF24" />
+    <path d="M 68 82 Q 70 60 100 56 Q 130 60 132 82" fill="#1D4ED8" />
+    <ellipse cx="90" cy="82" rx="32" ry="8" fill="#1E3A8A" />
+    <circle cx="100" cy="56" r="3" fill="#3B82F6" />
+    <line x1="100" y1="56" x2="100" y2="82" stroke="#2563EB" stroke-width="1" opacity="0.4" />
+    <circle cx="88" cy="90" r="4" fill="#1C1917" />
+    <circle cx="112" cy="90" r="4" fill="#1C1917" />
+    <circle cx="89.5" cy="88.5" r="1.8" fill="white" />
+    <circle cx="113.5" cy="88.5" r="1.8" fill="white" />
+    <path d="M 88 104 Q 100 113 112 104" stroke="#1C1917" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <rect x="97" y="104" width="6" height="4" rx="1" fill="white" />
+    <rect x="148" y="82" width="7" height="48" rx="3.5" fill="#D97706" transform="rotate(-20 151 106)" />
+    <circle cx="154" cy="132" r="5" fill="#B45309" transform="rotate(-20 151 106)" />
+    <ellipse cx="150" cy="82" rx="5.5" ry="8" fill="#FBBF24" transform="rotate(-20 150 82)" />
+    <rect x="80" y="166" width="14" height="18" rx="5" fill="#9F1239" />
+    <rect x="106" y="166" width="14" height="18" rx="5" fill="#9F1239" />
+    <ellipse cx="87" cy="186" rx="10" ry="5" fill="#881337" />
+    <ellipse cx="113" cy="186" rx="10" ry="5" fill="#881337" />
+  </symbol>
+
+  <!-- ========== VALIDATOR ========== -->
+  <symbol id="validator" viewBox="0 0 200 200">
+    <rect x="65" y="118" width="70" height="55" rx="10" fill="#6B7280" />
+    <polygon points="80,118 100,140 85,118" fill="#4B5563" />
+    <polygon points="120,118 100,140 115,118" fill="#4B5563" />
+    <circle cx="100" cy="142" r="2" fill="#374151" />
+    <circle cx="100" cy="152" r="2" fill="#374151" />
+    <circle cx="100" cy="162" r="2" fill="#374151" />
+    <rect x="42" y="126" width="24" height="8" rx="4" fill="#6B7280" />
+    <rect x="134" y="126" width="24" height="8" rx="4" fill="#6B7280" />
+    <circle cx="100" cy="86" r="28" fill="#FBBF24" />
+    <path d="M 72 80 Q 74 58 100 54 Q 126 58 128 80" fill="#44403C" />
+    <circle cx="88" cy="88" r="4" fill="#1C1917" />
+    <circle cx="112" cy="88" r="4" fill="#1C1917" />
+    <circle cx="89.2" cy="86.5" r="1.5" fill="white" />
+    <circle cx="113.2" cy="86.5" r="1.5" fill="white" />
+    <line x1="82" y1="79" x2="94" y2="78" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 106 76 Q 112 73 118 76" stroke="#1C1917" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <line x1="92" y1="102" x2="108" y2="102" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round" />
+    <text x="140" y="65" font-family="sans-serif" font-size="16" font-weight="bold" fill="#9CA3AF">?</text>
+    <text x="150" y="50" font-family="sans-serif" font-size="14" font-weight="bold" fill="#9CA3AF" opacity="0.7">?</text>
+    <text x="55" y="58" font-family="sans-serif" font-size="12" font-weight="bold" fill="#9CA3AF" opacity="0.5">?</text>
+    <rect x="22" y="118" width="24" height="30" rx="2" fill="#78350F" />
+    <rect x="28" y="114" width="12" height="6" rx="2" fill="#92400E" />
+    <rect x="25" y="122" width="18" height="24" rx="1" fill="#FEF3C7" />
+    <rect x="28" y="126" width="5" height="5" rx="1" fill="none" stroke="#059669" stroke-width="1.5" />
+    <path d="M 29 129 L 31 131 L 34 127" stroke="#059669" stroke-width="1.5" fill="none" />
+    <line x1="35" y1="128" x2="40" y2="128" stroke="#9CA3AF" stroke-width="1" />
+    <rect x="28" y="134" width="5" height="5" rx="1" fill="none" stroke="#DC2626" stroke-width="1.5" />
+    <line x1="29" y1="135" x2="32" y2="138" stroke="#DC2626" stroke-width="1.5" />
+    <line x1="32" y1="135" x2="29" y2="138" stroke="#DC2626" stroke-width="1.5" />
+    <line x1="35" y1="136" x2="40" y2="136" stroke="#9CA3AF" stroke-width="1" />
+    <circle cx="168" cy="120" r="10" fill="none" stroke="#374151" stroke-width="3" />
+    <circle cx="168" cy="120" r="7" fill="#DBEAFE" opacity="0.4" />
+    <line x1="160" y1="128" x2="152" y2="138" stroke="#374151" stroke-width="3" stroke-linecap="round" />
+    <rect x="80" y="170" width="12" height="18" rx="5" fill="#4B5563" />
+    <rect x="108" y="170" width="12" height="18" rx="5" fill="#4B5563" />
+    <ellipse cx="86" cy="190" rx="9" ry="5" fill="#374151" />
+    <ellipse cx="114" cy="190" rx="9" ry="5" fill="#374151" />
+  </symbol>
+</svg>

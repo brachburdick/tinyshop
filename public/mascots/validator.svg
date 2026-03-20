@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- TINY Validator: Skeptical face with ???, long coat, clipboard — the skeptic turned approver -->
+
+  <!-- Body / Inspector's Coat -->
+  <rect x="65" y="118" width="70" height="55" rx="10" fill="#6B7280" />
+  <!-- Coat lapels -->
+  <polygon points="80,118 100,140 85,118" fill="#4B5563" />
+  <polygon points="120,118 100,140 115,118" fill="#4B5563" />
+  <!-- Coat buttons -->
+  <circle cx="100" cy="142" r="2" fill="#374151" />
+  <circle cx="100" cy="152" r="2" fill="#374151" />
+  <circle cx="100" cy="162" r="2" fill="#374151" />
+
+  <!-- Arms -->
+  <rect x="42" y="126" width="24" height="8" rx="4" fill="#6B7280" />
+  <rect x="134" y="126" width="24" height="8" rx="4" fill="#6B7280" />
+
+  <!-- Head -->
+  <circle cx="100" cy="86" r="28" fill="#FBBF24" />
+
+  <!-- Simple short hair -->
+  <path d="M 72 80 Q 74 58 100 54 Q 126 58 128 80" fill="#44403C" />
+
+  <!-- Skeptical eyes — one eyebrow raised -->
+  <circle cx="88" cy="88" r="4" fill="#1C1917" />
+  <circle cx="112" cy="88" r="4" fill="#1C1917" />
+  <circle cx="89.2" cy="86.5" r="1.5" fill="white" />
+  <circle cx="113.2" cy="86.5" r="1.5" fill="white" />
+  <!-- One eyebrow raised, one flat -->
+  <line x1="82" y1="79" x2="94" y2="78" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M 106 76 Q 112 73 118 76" stroke="#1C1917" stroke-width="2.5" fill="none" stroke-linecap="round" />
+
+  <!-- Skeptical flat mouth -->
+  <line x1="92" y1="102" x2="108" y2="102" stroke="#1C1917" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Question marks floating around head -->
+  <text x="140" y="65" font-family="sans-serif" font-size="16" font-weight="bold" fill="#9CA3AF">?</text>
+  <text x="150" y="50" font-family="sans-serif" font-size="14" font-weight="bold" fill="#9CA3AF" opacity="0.7">?</text>
+  <text x="55" y="58" font-family="sans-serif" font-size="12" font-weight="bold" fill="#9CA3AF" opacity="0.5">?</text>
+
+  <!-- Clipboard in left hand -->
+  <rect x="22" y="118" width="24" height="30" rx="2" fill="#78350F" />
+  <!-- Clipboard clip -->
+  <rect x="28" y="114" width="12" height="6" rx="2" fill="#92400E" />
+  <!-- Clipboard paper -->
+  <rect x="25" y="122" width="18" height="24" rx="1" fill="#FEF3C7" />
+  <!-- Checklist on clipboard -->
+  <rect x="28" y="126" width="5" height="5" rx="1" fill="none" stroke="#059669" stroke-width="1.5" />
+  <path d="M 29 129 L 31 131 L 34 127" stroke="#059669" stroke-width="1.5" fill="none" />
+  <line x1="35" y1="128" x2="40" y2="128" stroke="#9CA3AF" stroke-width="1" />
+  <rect x="28" y="134" width="5" height="5" rx="1" fill="none" stroke="#DC2626" stroke-width="1.5" />
+  <line x1="29" y1="135" x2="32" y2="138" stroke="#DC2626" stroke-width="1.5" />
+  <line x1="32" y1="135" x2="29" y2="138" stroke="#DC2626" stroke-width="1.5" />
+  <line x1="35" y1="136" x2="40" y2="136" stroke="#9CA3AF" stroke-width="1" />
+
+  <!-- Magnifying glass in right hand -->
+  <circle cx="168" cy="120" r="10" fill="none" stroke="#374151" stroke-width="3" />
+  <circle cx="168" cy="120" r="7" fill="#DBEAFE" opacity="0.4" />
+  <line x1="160" y1="128" x2="152" y2="138" stroke="#374151" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Legs -->
+  <rect x="80" y="170" width="12" height="18" rx="5" fill="#4B5563" />
+  <rect x="108" y="170" width="12" height="18" rx="5" fill="#4B5563" />
+
+  <!-- Shoes -->
+  <ellipse cx="86" cy="190" rx="9" ry="5" fill="#374151" />
+  <ellipse cx="114" cy="190" rx="9" ry="5" fill="#374151" />
+</svg>
